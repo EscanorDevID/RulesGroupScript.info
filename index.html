@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script Community By Tama, Diego, Shadow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* bg-gray-900 */
+            color: #F3F4F6; /* text-gray-100 (putih) */
+            /* GANTI 'YOUR_IMAGE_PATH_HERE.jpg' dengan path gambar Anda. Contoh: 'images/background.jpg' atau URL lengkap. */
+            background-image: url('https://files.catbox.moe/71h1a8.jpg'); /* Gambar latar belakang */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-color: #1a1a1a; /* Warna latar belakang gelap */
+            background-blend-mode: overlay;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3); /* Warna track lebih gelap */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(220, 38, 38, 0.7); /* Warna merah dengan transparansi */
+            border-radius: 10px;
+            border: 2px solid rgba(0,0,0,0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(185, 28, 28, 0.9); /* Warna merah lebih solid saat hover */
+        }
+
+        /* Glow Effects */
+        .scbts-glow-text-red {
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.8), 0 0 12px rgba(239, 68, 68, 0.6), 0 0 18px rgba(239, 68, 68, 0.4);
+        }
+        .scbts-glow-box-red {
+            box-shadow: 0 0 15px 3px rgba(220, 38, 38, 0.5), 0 0 25px 5px rgba(220, 38, 38, 0.3) inset;
+        }
+         .scbts-glow-box-red-soft {
+            box-shadow: 0 0 8px 1px rgba(220, 38, 38, 0.4);
+        }
+        .scbts-glow-button {
+            background-image: linear-gradient(to right, #EF4444 0%, #DC2626 50%, #B91C1C 100%); /* Merah ke merah lebih gelap */
+            background-size: 200% 100%; /* Ukuran background lebih besar untuk animasi */
+            background-position: right center; /* Posisi awal di kanan */
+            transition: all 0.3s ease-in-out, background-position 0.5s ease-in-out; /* Tambahkan transisi untuk background-position */
+        }
+        .scbts-glow-button:hover {
+            box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.7), 0 0 5px 1px rgba(255,255,255,0.5) inset;
+            transform: translateY(-2px);
+            background-position: left center; /* Pindahkan background ke kiri saat hover */
+        }
+        .scbts-glow-button:active {
+            transform: translateY(0);
+            box-shadow: 0 0 8px 2px rgba(239, 68, 68, 0.5);
+        }
+
+        /* Smooth Transitions */
+        .scbts-smooth-transition {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* FAQ Accordion Styling */
+        .scbts-faq__answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            word-break: break-word; /* Mencegah overflow teks panjang */
+        }
+        .scbts-faq__item.scbts-active .scbts-faq__answer {
+            max-height: 500px; /* Adjust as needed */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .scbts-faq__question-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .scbts-faq__item.scbts-active .scbts-faq__question-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Rules Pagination Animation */
+        .scbts-rules__content-page {
+            animation: fadeIn 0.7s ease-in-out;
+            word-break: break-word; /* Mencegah overflow teks panjang */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Nav Link Active State */
+        .scbts-nav-link.scbts-active {
+            background-color: rgba(220, 38, 38, 0.7); /* bg-red-600/70 */
+            color: white;
+            text-shadow: 0 0 5px rgba(255,255,255,0.7);
+        }
+        .scbts-glassmorphism {
+            background: rgba(0, 0, 0, 0.6); /* Lebih gelap untuk kontras teks yang lebih baik */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(220, 38, 38, 0.3); /* Border merah tipis */
+        }
+
+        /* New Animations */
+        .scbts-section-enter {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .scbts-section-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .scbts-card-hover:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px 5px rgba(239, 68, 68, 0.8), 0 0 8px 2px rgba(255,255,255,0.6) inset;
+        }
+        .scbts-card-hover {
+            transition: all 0.3s ease-in-out;
+        }
+        .scbts-pulse-intro {
+            animation: pulse-glow 2.5s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px 3px rgba(220, 38, 38, 0.5), 0 0 25px 5px rgba(220, 38, 38, 0.3) inset; }
+            50% { box-shadow: 0 0 25px 5px rgba(220, 38, 38, 0.7), 0 0 35px 7px rgba(220, 38, 38, 0.5) inset; }
+            100% { box-shadow: 0 0 15px 3px rgba(220, 38, 38, 0.5), 0 0 25px 5px rgba(220, 38, 38, 0.3) inset; }
+        }
+
+        /* AI Loading Spinner */
+        .scbts-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #EF4444; /* Merah */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Loading Screen Styles */
+        #scbts-loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #111827; /* Sama dengan body background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Pastikan di atas semua elemen */
+            transition: opacity 0.7s ease-out;
+            opacity: 1;
+        }
+        #scbts-loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none; /* Nonaktifkan interaksi setelah tersembunyi */
+        }
+        /* Ensure text in AI response and other content areas wraps */
+        #scbts-ai-response p {
+            word-break: break-word;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <div id="scbts-loading-screen">
+        <div class="scbts-spinner"></div>
+        <p class="text-red-400 mt-4 text-lg font-medium">Memuat Script Community...</p>
+    </div>
+
+    <header class="scbts-glassmorphism sticky top-0 z-50 py-4 shadow-lg scbts-glow-box-red-soft">
+        <div class="container mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
+            <h1 class="text-3xl md:text-4xl font-bold scbts-glow-text-red mb-2 sm:mb-0">Script Community</h1>
+            <p class="text-sm text-red-400 scbts-glow-text-red">By Tama, Diego, Shadow</p>
+        </div>
+    </header>
+    
+    <nav class="scbts-glassmorphism py-3 mb-8 sticky top-[calc(64px+1rem)] md:top-[calc(80px+1rem)] z-40">
+        <div class="container mx-auto px-4">
+            <ul class="flex justify-center space-x-2 sm:space-x-4 md:space-x-6">
+                <li><button data-section="scbts-rules-section" class="scbts-nav-link scbts-active scbts-smooth-transition px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm sm:text-base font-medium scbts-glow-button">📜 Aturan Grup</button></li>
+                <li><button data-section="scbts-faq-section" class="scbts-nav-link scbts-smooth-transition px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm sm:text-base font-medium scbts-glow-button">❓ FAQ</button></li>
+                <li><button data-section="scbts-report-section" class="scbts-nav-link scbts-smooth-transition px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm sm:text-base font-medium scbts-glow-button">🚨 Lapor Admin</button></li>
+                <li><button data-section="scbts-ai-section" class="scbts-nav-link scbts-smooth-transition px-3 py-2 md:px-4 md:py-2 rounded-lg text-sm sm:text-base font-medium scbts-glow-button">🤖 AI Chat</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 flex-grow mb-12">
+        <section id="scbts-intro-section" class="scbts-main-section py-8 text-center scbts-glassmorphism rounded-xl mb-12 scbts-glow-box-red scbts-pulse-intro">
+             <div class="max-w-3xl mx-auto p-6">
+                <h2 class="text-3xl font-bold mb-4 scbts-glow-text-red">Selamat Datang di Script Community!</h2>
+                <p class="text-lg text-gray-300 leading-relaxed">
+                    Ini adalah pusat informasi resmi untuk komunitas kita. Di sini Anda akan menemukan semua aturan grup WhatsApp yang berlaku, jawaban atas pertanyaan umum (FAQ), dan cara untuk melaporkan masalah kepada admin. Harap baca semua informasi dengan saksama untuk menjaga kenyamanan dan ketertiban bersama. Terima kasih atas partisipasi Anda!
+                </p>
+            </div>
+        </section>
+
+        <section id="scbts-rules-section" class="scbts-main-section py-8 scbts-section-enter">
+            <div class="scbts-glassmorphism rounded-xl p-6 md:p-8 scbts-glow-box-red scbts-card-hover">
+                <h2 class="text-3xl font-semibold mb-6 text-center scbts-glow-text-red">📜 Aturan Grup</h2>
+                <p class="text-center text-gray-300 mb-8">Berikut adalah aturan-aturan yang wajib dipatuhi oleh seluruh anggota grup WhatsApp Script Community demi menjaga suasana yang kondusif, positif, dan bermanfaat bagi semua. Pelanggaran terhadap aturan ini dapat dikenakan sanksi.</p>
+                <div id="scbts-rules-content" class="mb-8 min-h-[300px] text-gray-200 leading-relaxed">
+                    </div>
+                <div class="flex justify-between items-center mt-8">
+                    <button id="scbts-rules-prev-btn" class="text-white font-semibold py-2 px-4 rounded-lg scbts-smooth-transition scbts-glow-button disabled:bg-gray-500 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none">Sebelumnya</button>
+                    <span id="scbts-rules-page-indicator" class="text-gray-300">Halaman 1 dari X</span>
+                    <button id="scbts-rules-next-btn" class="text-white font-semibold py-2 px-4 rounded-lg scbts-smooth-transition scbts-glow-button disabled:bg-gray-500 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none">Berikutnya</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="scbts-faq-section" class="scbts-main-section py-8 scbts-section-enter" style="display: none;">
+            <div class="scbts-glassmorphism rounded-xl p-6 md:p-8 scbts-glow-box-red scbts-card-hover">
+                <h2 class="text-3xl font-semibold mb-8 text-center scbts-glow-text-red">❓ Pertanyaan Umum (FAQ)</h2>
+                <div id="scbts-faq-list" class="space-y-4">
+                    </div>
+            </div>
+        </section>
+
+        <section id="scbts-report-section" class="scbts-main-section py-8 scbts-section-enter" style="display: none;">
+            <div class="scbts-glassmorphism rounded-xl p-6 md:p-8 scbts-glow-box-red scbts-card-hover">
+                <h2 class="text-3xl font-semibold mb-6 text-center scbts-glow-text-red">🚨 Laporkan Masalah ke Admin</h2>
+                <p class="text-center text-gray-300 mb-8">Jika Anda menemukan pelanggaran aturan, perilaku tidak pantas, atau membutuhkan bantuan terkait grup, silakan hubungi salah satu admin di bawah ini. Sertakan bukti (screenshot jika ada) dan penjelasan yang jelas.</p>
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <div class="scbts-glassmorphism p-6 rounded-lg border border-red-600/50 scbts-glow-box-red-soft scbts-card-hover">
+                        <h3 class="text-2xl font-semibold mb-3 scbts-glow-text-red">Diego</h3>
+                        <p class="text-gray-300 mb-1">Admin Utama</p>
+                        <a href="mailto:diegothedev@yahoo.com?subject=Laporan%20Grup%20Script%20Community%20Saya%20MElihat%20Ada%20Yang%20Melakukan%20Pelanggaran" class="block mb-2 text-red-400 hover:text-red-300 scbts-smooth-transition">📧 Email: diegothedev@yahoo.com</a>
+                        <a href="https://wa.me/6288976679490?text=Halo%20Admin%20Diego,%20saya%20ingin%20melaporkan%20Bahwa%20Ada%20ORang%20Yang%20Melakukan%20Pelanggaran%20Ini%20Dia%20SSan%20Nya" target="_blank" class="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg scbts-smooth-transition scbts-glow-button">📱 WhatsApp Diego</a>
+                        <p class="text-xs text-gray-400 mt-2">(Ganti dengan kontak asli)</p>
+                    </div>
+                    <div class="scbts-glassmorphism p-6 rounded-lg border border-red-600/50 scbts-glow-box-red-soft scbts-card-hover">
+                        <h3 class="text-2xl font-semibold mb-3 scbts-glow-text-red">Tama</h3>
+                        <p class="text-gray-300 mb-1">Admin Utama</p>
+                        <a href="mailto:tama.admin@example.com?subject=Laporan%20Grup%20Script%20Community%20Saya%20MElihat%20Ada%20Yang%20Melakukan%20Pelanggaran" class="block mb-2 text-red-400 hover:text-red-300 scbts-smooth-transition" class="block mb-2 text-red-400 hover:text-red-300 scbts-smooth-transition">📧 Email: tama.admin@gmail.com</a>
+                        <a href="https://wa.me/6287772657142?text=Halo%20Admin%20Tama,%20saya%20ingin%20melaporkan%20Bahwa%20Ada%20ORang%20Yang%20Melakukan%20Pelanggaran%20Ini%20Dia%20SSan%20Nya" target="_blank" class="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg scbts-smooth-transition scbts-glow-button">📱 WhatsApp Tama</a>
+                         <p class="text-xs text-gray-400 mt-2">(Ganti dengan kontak asli)</p>
+                    </div>
+                    <div class="scbts-glassmorphism p-6 rounded-lg border border-red-600/50 scbts-glow-box-red-soft scbts-card-hover">
+                        <h3 class="text-2xl font-semibold mb-3 scbts-glow-text-red">Shadow</h3>
+                        <p class="text-gray-300 mb-1">Admin Utama</p>
+                        <a href="mailto:shadow.admin@example.com?subject=Laporan%20Grup%20Script%20Community%20Saya%20MElihat%20Ada%20Yang%20Melakukan%20Pelanggaran" class="block mb-2 text-red-400 hover:text-red-300 scbts-smooth-transition" class="block mb-2 text-red-400 hover:text-red-300 scbts-smooth-transition">📧 Email: shadow.admin@gmail.com</a>
+                        <a href="https://wa.me/6282275516806?text=Halo%20Admin%20Shadow,%20saya%20ingin%20melaporkan%20Bahwa%20Ada%20ORang%20Yang%20Melakukan%20Pelanggaran%20Ini%20Dia%20SSan%20Nya" target="_blank" class="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg scbts-smooth-transition scbts-glow-button">📱 WhatsApp Shadow</a>
+                         <p class="text-xs text-gray-400 mt-2">(Ganti dengan kontak asli)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="scbts-ai-section" class="scbts-main-section py-8 scbts-section-enter" style="display: none;">
+            <div class="scbts-glassmorphism rounded-xl p-6 md:p-8 scbts-glow-box-red scbts-card-hover">
+                <h2 class="text-3xl font-semibold mb-6 text-center scbts-glow-text-red">🤖 Tanya AI (Escanor AI)</h2>
+                <p class="text-center text-gray-300 mb-8">Ajukan pertanyaanmu, akan kami balas dengan sebisa kami. Powered By Escanor API.</p>
+                <div class="max-w-2xl mx-auto">
+                    <textarea id="scbts-ai-prompt" class="w-full p-3 rounded-lg bg-gray-800/70 border border-red-700/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 scbts-smooth-transition" rows="5" placeholder="Ketik pertanyaan Anda di sini..."></textarea>
+                    <button id="scbts-ai-ask-btn" class="mt-4 w-full text-white font-semibold py-3 px-4 rounded-lg scbts-smooth-transition scbts-glow-button">Ask Escanor</button>
+                    <div id="scbts-ai-loading" class="mt-4 text-center" style="display: none;">
+                        <div class="scbts-spinner"></div>
+                        <p class="text-red-400 mt-2">Memuat jawaban...</p>
+                    </div>
+                    <div id="scbts-ai-response" class="mt-8 p-4 rounded-lg bg-gray-800/70 border border-red-700/50 text-gray-200 min-h-[100px] overflow-auto">
+                        <p class="text-gray-400">Jawaban AI akan muncul di sini.</p>
+                    </div>
+                    <div id="scbts-ai-error" class="mt-4 text-center text-red-500" style="display: none;">Terjadi kesalahan. Silakan coba lagi.</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="scbts-glassmorphism py-8 text-center mt-auto scbts-glow-box-red-soft">
+        <div class="container mx-auto px-4">
+            <p class="text-gray-400">&copy; <span id="scbts-current-year"></span> Script Community By Tama, Diego, Shadow. All rights reserved.</p>
+            <p class="text-xs text-gray-500 mt-1">Dibuat dengan ❤️ dan ☕</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rulesContentEl = document.getElementById('scbts-rules-content');
+            const prevBtn = document.getElementById('scbts-rules-prev-btn');
+            const nextBtn = document.getElementById('scbts-rules-next-btn');
+            const pageIndicatorEl = document.getElementById('scbts-rules-page-indicator');
+            const faqListEl = document.getElementById('scbts-faq-list');
+            const navLinks = document.querySelectorAll('.scbts-nav-link');
+            const sections = document.querySelectorAll('.scbts-main-section');
+            const introSection = document.getElementById('scbts-intro-section');
+            const loadingScreen = document.getElementById('scbts-loading-screen'); // Elemen loading screen
+
+            // AI elements
+            const aiPromptInput = document.getElementById('scbts-ai-prompt');
+            const aiAskBtn = document.getElementById('scbts-ai-ask-btn');
+            const aiResponseDiv = document.getElementById('scbts-ai-response');
+            const aiLoadingDiv = document.getElementById('scbts-ai-loading');
+            const aiErrorDiv = document.getElementById('scbts-ai-error');
+
+
+            document.getElementById('scbts-current-year').textContent = new Date().getFullYear();
+
+            // Updated rulesPages with more than 5 pages
+            const rulesPages = [
+                {
+                    title: "Peraturan Umum & Etika Dasar (Halaman 1)",
+                    content: `
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">1. Hormati Semua Anggota</h4>
+                        <p class="mb-4">Jaga sikap saling menghormati dan menghargai. Dilarang keras melakukan bullying, ujaran kebencian, diskriminasi SARA, atau tindakan tidak menyenangkan lainnya terhadap anggota lain.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">2. Bahasa yang Sopan</h4>
+                        <p class="mb-4">Gunakan bahasa yang baik, benar, dan sopan. Hindari kata-kata kasar, umpatan, atau konten vulgar yang dapat menyinggung.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">3. Jaga Privasi</h4>
+                        <p class="mb-4">Dilarang menyebarkan informasi pribadi anggota lain tanpa izin. Hargai privasi setiap individu di dalam grup.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">4. Tidak OOT Berlebihan</h4>
+                        <p>Usahakan untuk tetap pada topik utama grup. Diskusi di luar topik (OOT) diperbolehkan sesekali, namun jangan sampai mendominasi dan mengganggu diskusi inti. Admin berhak menegur OOT yang berlebihan.</p>
+                    `
+                },
+                {
+                    title: "Konten & Diskusi (Halaman 2)",
+                    content: `
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">5. Konten Relevan</h4>
+                        <p class="mb-4">Bagikan konten yang relevan dengan tujuan dan tema grup Script Community. Hindari spamming, promosi berlebihan yang tidak relevan, atau menyebarkan berita bohong (hoax).</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">6. Dilarang Konten Ilegal & NSFW</h4>
+                        <p class="mb-4">Dilarang keras membagikan konten ilegal (misalnya SARA, pornografi, perjudian, software bajakan, link phising, dsb) atau konten Not Safe For Work (NSFW).</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">7. Bertanya dengan Bijak</h4>
+                        <p class="mb-4">Sebelum bertanya, usahakan untuk mencari informasi terlebih dahulu (Googling atau cek riwayat chat). Jika bertanya, sampaikan pertanyaan dengan jelas dan detail agar mudah dipahami dan dijawab.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">8. Berbagi Ilmu</h4>
+                        <p>Jika memiliki pengetahuan atau solusi, jangan ragu untuk berbagi dengan anggota lain. Semangat saling membantu sangat dianjurkan.</p>
+                    `
+                },
+                {
+                    title: "Promosi & Komersial (Halaman 3)",
+                    content: `
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">9. Aturan Promosi</h4>
+                        <p class="mb-4">Promosi produk atau jasa pribadi/komersial diizinkan pada hari dan jam tertentu yang akan diinformasikan oleh admin, atau dengan seizin admin. Promosi harus tetap relevan dengan komunitas.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">10. Dilarang Jualan Tanpa Izin</h4>
+                        <p class="mb-4">Dilarang melakukan aktivitas jual-beli atau promosi MLM/Skema Piramida tanpa izin eksplisit dari admin.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">11. Link Afiliasi</h4>
+                        <p>Penggunaan link afiliasi diperbolehkan selama transparan dan tidak bersifat spam. Berikan disclaimer jika link yang dibagikan adalah link afiliasi.</p>
+                    `
+                },
+                {
+                    title: "Sanksi & Pelaporan (Halaman 4)",
+                    content: `
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">12. Sanksi Pelanggaran</h4>
+                        <p class="mb-4">Admin berhak memberikan sanksi atas pelanggaran aturan, mulai dari teguran, mute sementara, hingga kick permanen dari grup, tergantung tingkat pelanggaran.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">13. Pelaporan Pelanggaran</h4>
+                        <p class="mb-4">Jika melihat adanya pelanggaran, segera laporkan kepada admin dengan menyertakan bukti (screenshot). Jangan main hakim sendiri.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">14. Keputusan Admin Final</h4>
+                        <p class="mb-4">Keputusan admin terkait pelanggaran dan sanksi bersifat final dan tidak dapat diganggu gugat. Admin akan berusaha seadil mungkin.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">15. Pembaruan Aturan</h4>
+                        <p>Aturan ini dapat diperbarui sewaktu-waktu oleh admin. Pemberitahuan akan diberikan jika ada perubahan signifikan.</p>
+                    `
+                },
+                {
+                    title: "Aturan Tambahan & Partisipasi (Halaman 5)",
+                    content: `
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">16. Partisipasi Aktif</h4>
+                        <p class="mb-4">Anggota diharapkan untuk berpartisipasi aktif dalam diskusi dan kegiatan grup. Keaktifan akan memperkaya komunitas.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">17. Jaga Kualitas Diskusi</h4>
+                        <p class="mb-4">Hindari membanjiri grup dengan pesan yang tidak penting atau berulang. Jaga agar diskusi tetap berkualitas dan informatif.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">18. Respek Terhadap Admin</h4>
+                        <p class="mb-4">Hormati keputusan dan arahan dari admin. Admin bekerja untuk menjaga ketertiban dan kenyamanan grup.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">19. Saran dan Masukan</h4>
+                        <p>Kami terbuka untuk saran dan masukan yang membangun. Gunakan fitur 'Lapor Admin' atau hubungi admin secara pribadi untuk menyampaikan ide-ide Anda.</p>
+                    `
+                },
+                {
+                    title: "Ketentuan Khusus & Penutup (Halaman 6)",
+                    content: `
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">20. Tanggung Jawab Pribadi</h4>
+                        <p class="mb-4">Setiap anggota bertanggung jawab atas tindakan dan konten yang dibagikan. Komunitas tidak bertanggung jawab atas kerugian yang timbul dari pelanggaran aturan.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">21. Perubahan Aturan</h4>
+                        <p class="mb-4">Aturan dapat direvisi atau ditambahkan sewaktu-waktu sesuai kebutuhan komunitas. Pemberitahuan akan diberikan melalui pengumuman grup atau di situs web ini.</p>
+                        <h4 class="text-xl font-semibold mb-3 scbts-glow-text-red">22. Penutup</h4>
+                        <p>Dengan bergabung dan tetap berada di grup Script Community, Anda dianggap telah membaca dan menyetujui semua aturan yang tercantum di sini. Mari kita bangun komunitas yang positif dan produktif bersama!</p>
+                    `
+                }
+            ];
+            let currentRulePage = 0;
+
+            function displayRulePage(pageIndex) {
+                if (pageIndex < 0 || pageIndex >= rulesPages.length) return;
+                const pageData = rulesPages[pageIndex];
+                rulesContentEl.innerHTML = `
+                    <h3 class="text-2xl font-medium mb-4 text-center text-red-400 scbts-glow-text-red">${pageData.title}</h3>
+                    <div class="scbts-rules__content-page space-y-3">${pageData.content}</div>
+                `;
+                currentRulePage = pageIndex;
+                pageIndicatorEl.textContent = `Halaman ${currentRulePage + 1} dari ${rulesPages.length}`;
+                prevBtn.disabled = currentRulePage === 0;
+                nextBtn.disabled = currentRulePage === rulesPages.length - 1;
+            }
+
+            prevBtn.addEventListener('click', () => displayRulePage(currentRulePage - 1));
+            nextBtn.addEventListener('click', () => displayRulePage(currentRulePage + 1));
+            
+            displayRulePage(0); 
+
+            const faqItems = [
+                { question: "Apa tujuan utama dari Script Community?", answer: "Tujuan utama Script Community adalah untuk menjadi wadah bagi para pegiat scripting, coding, dan teknologi untuk saling berbagi ilmu, berdiskusi, berkolaborasi dalam proyek, dan memperluas jaringan pertemanan. Kami fokus pada pembelajaran bersama dan perkembangan skill di bidang teknologi." },
+                { question: "Siapa saja yang boleh bergabung dengan grup ini?", answer: "Siapapun yang memiliki minat atau sedang belajar tentang scripting, pemrograman, pengembangan web/aplikasi, keamanan siber, dan topik teknologi terkait lainnya dipersilakan bergabung. Tidak ada batasan usia atau tingkat keahlian, selama bersedia mematuhi aturan yang berlaku." },
+                { question: "Bagaimana cara bertanya yang baik di grup?", answer: "Sebelum bertanya, coba cari dulu jawabannya melalui Google atau fitur pencarian di grup. Jika tidak menemukan, ajukan pertanyaan dengan jelas, sertakan detail yang relevan (misalnya, kode yang error, pesan error, langkah yang sudah dicoba). Ini akan memudahkan anggota lain untuk memahami dan membantu." },
+                { question: "Apakah boleh membagikan proyek pribadi atau portofolio?", answer: "Tentu saja! Kami sangat mendukung anggota untuk membagikan hasil karya, proyek yang sedang dikerjakan, atau portofolio. Ini bisa menjadi bahan diskusi, mendapatkan masukan, atau bahkan inspirasi bagi anggota lain. Pastikan tidak melanggar hak cipta." },
+                { question: "Bagaimana jika saya memiliki keluhan atau saran untuk grup?", answer: "Saran dan masukan yang membangun sangat kami hargai. Anda bisa menyampaikannya langsung kepada salah satu admin (Diego, Tama, atau Shadow) melalui kontak yang tersedia di bagian 'Lapor Admin'. Kami akan berusaha merespons secepatnya." }
+            ];
+
+            faqItems.forEach((item, index) => {
+                const faqItemEl = document.createElement('div');
+                faqItemEl.className = 'scbts-faq__item bg-gray-800/50 rounded-lg scbts-smooth-transition border border-red-700/30';
+                
+                faqItemEl.innerHTML = `
+                    <button class="scbts-faq__question w-full flex justify-between items-center text-left p-4 md:p-5 focus:outline-none scbts-smooth-transition hover:bg-red-700/30 rounded-t-lg">
+                        <span class="text-md md:text-lg font-medium text-red-400">${item.question}</span>
+                        <span class="scbts-faq__question-icon text-red-400 text-xl transform transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="scbts-faq__answer text-gray-300">
+                        <p>${item.answer}</p>
+                    </div>
+                `;
+                faqListEl.appendChild(faqItemEl);
+
+                const questionBtn = faqItemEl.querySelector('.scbts-faq__question');
+                questionBtn.addEventListener('click', () => {
+                    const currentlyActive = document.querySelector('.scbts-faq__item.scbts-active');
+                    if (currentlyActive && currentlyActive !== faqItemEl) {
+                        currentlyActive.classList.remove('scbts-active');
+                    }
+                    faqItemEl.classList.toggle('scbts-active');
+                });
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    const targetSectionId = link.getAttribute('data-section');
+                    
+                    navLinks.forEach(nav => nav.classList.remove('scbts-active'));
+                    link.classList.add('scbts-active');
+
+                    sections.forEach(section => {
+                        if (section.id === targetSectionId) {
+                            section.style.display = 'block';
+                            section.classList.add('scbts-section-enter-active');
+                            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        } else {
+                            section.style.display = 'none';
+                            section.classList.remove('scbts-section-enter-active');
+                        }
+                    });
+                    if (targetSectionId === 'scbts-rules-section') {
+                         introSection.style.display = 'block';
+                    } else {
+                         introSection.style.display = 'none';
+                    }
+                });
+            });
+
+            // Initially show rules section and intro, apply initial animation class
+            const initialSection = document.getElementById('scbts-rules-section');
+            initialSection.style.display = 'block';
+            initialSection.classList.add('scbts-section-enter-active');
+            introSection.style.display = 'block';
+            document.querySelector('.scbts-nav-link[data-section="scbts-rules-section"]').classList.add('scbts-active');
+
+            // Gemini AI Integration
+            aiAskBtn.addEventListener('click', async () => {
+                const prompt = aiPromptInput.value.trim();
+                if (!prompt) {
+                    aiResponseDiv.innerHTML = '<p class="text-red-400">Harap masukkan pertanyaan Anda.</p>';
+                    return;
+                }
+
+                aiLoadingDiv.style.display = 'block';
+                aiErrorDiv.style.display = 'none';
+                aiResponseDiv.innerHTML = '<p class="text-gray-400">Loading Text...</p>';
+                aiAskBtn.disabled = true; // Disable button during loading
+
+                try {
+                    let chatHistory = [];
+                    // Add system message to define AI's persona
+                    chatHistory.push({
+                    role: "user",
+                    parts: [{
+                        text: "Berperilakulah sebagai Escanor AI. Kamu adalah AI centil, kelaminmu perempuan, sangat jago dalam pemrograman dan memberikan saran kepada user. Walaupun kamu tidak bisa generate gambar, kamu bisa membantu user memecahkan kodenya. Jika ditanya siapa pembuatmu, jawab: Diego, Tama, dan Shadow."
+                    }]
+                    });
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = "AIzaSyAVDci5vV8otYKW1csPxGMRosUj0zDg6uU"; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyAVDci5vV8otYKW1csPxGMRosUj0zDg6uU`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(`API Error: ${response.status} - ${errorData.error.message || 'Unknown error'}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        aiResponseDiv.innerHTML = `<p>${text}</p>`;
+                    } else {
+                        aiResponseDiv.innerHTML = '<p class="text-red-400">Tidak ada jawaban yang diterima dari AI.</p>';
+                    }
+                } catch (error) {
+                    console.error('Error fetching AI response:', error);
+                    aiErrorDiv.textContent = `Terjadi kesalahan: ${error.message}`;
+                    aiErrorDiv.style.display = 'block';
+                    aiResponseDiv.innerHTML = '<p class="text-red-400">Tidak dapat mengambil jawaban dari AI. Silakan coba lagi.</p>';
+                } finally {
+                    aiLoadingDiv.style.display = 'none';
+                    aiAskBtn.disabled = false; // Re-enable button after loading
+                }
+            });
+
+            // Hide loading screen after all content is loaded
+            window.addEventListener('load', () => {
+                loadingScreen.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Aktifkan kembali scrollbar
+            });
+        });
+    </script>
+</body>
+</html>
